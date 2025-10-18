@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class MyDBHandler extends SQLiteOpenHelper {
     private static final String TABLE_NAME = "products";
     private static final String COLUMN_ID = "id";
@@ -50,5 +52,24 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_NAME, null, values);
         db.close();
+    }
+
+    public Cursor findProduct(String name, Double price) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        if (price != null && name == null){
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_PRODUCT_PRICE + " = " + price.toString();
+            return db.rawQuery(query, null);
+        } else if (price == null && name != null) {
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_PRODUCT_NAME + " = '" + name + "'";
+            return db.rawQuery(query, null);
+        } else if (price != null && name != null) {
+            String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_PRODUCT_PRICE + " = " + price.toString() + " AND " + COLUMN_PRODUCT_NAME + " = '" + name + "'";
+            return db.rawQuery(query, null);
+        } else {
+            return getData();
+        }
+
+
     }
 }

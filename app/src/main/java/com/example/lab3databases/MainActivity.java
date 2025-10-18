@@ -67,7 +67,35 @@ public class MainActivity extends AppCompatActivity {
         findBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Find product", Toast.LENGTH_SHORT).show();
+                String name = productName.getText().toString().trim();
+                if (name.isEmpty()) {
+                    name = null;
+                }
+
+                Double price = null;
+                String priceText = productPrice.getText().toString().trim();
+                if (!priceText.isEmpty()) {
+                    try {
+                        price = Double.parseDouble(priceText);
+                    } catch (NumberFormatException e) {
+                        price = null;
+                    }
+                }
+
+                productList.clear();
+                Cursor cursor = dbHandler.findProduct(name, price);
+                if (cursor.getCount() == 0) {
+                    Toast.makeText(MainActivity.this, "Nothing to show", Toast.LENGTH_SHORT).show();
+                } else {
+                    while (cursor.moveToNext()) {
+                        productList.add(cursor.getString(1) + " (" +cursor.getString(2)+")");
+                    }
+                }
+
+                System.out.println(productList);
+
+                adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, productList);
+                productListView.setAdapter(adapter);
             }
         });
 
