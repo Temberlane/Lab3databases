@@ -103,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Delete product", Toast.LENGTH_SHORT).show();
+                String name = productName.getText().toString();
+                Product product = new Product(name, 0);
+                dbHandler.deleteProduct(product);
+                productName.setText("");
+                productPrice.setText("");
+                viewProducts();
             }
         });
 

@@ -54,7 +54,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cursor findProduct(String name, Double price) {
+    public void deleteProduct(Product product) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, COLUMN_PRODUCT_NAME + "= ?", new String[]{product.getProductName()});
+        db.close();
+    }
+
+
+        public Cursor findProduct(String name, Double price) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         if (price != null && name == null){
